@@ -6,7 +6,7 @@ public class Gun : MonoBehaviour
 
     // 나중에 다른 총 추가할 거 생각해서 진행
 
-    protected float coolTime = 0.5f;
+    protected float coolTime = 0.3f;
     protected float lastShot = 0f;
     protected int damage = 20;
     protected float maxDistance = 10f; // 저격, 샷건일 때 바꾸기
@@ -24,7 +24,6 @@ public class Gun : MonoBehaviour
         if(Time.time > lastShot + coolTime)
         {
             lastShot = Time.time;
-            Debug.Log("bang");
 
 
             Vector3 hitPoint = Vector3.zero;
@@ -35,6 +34,11 @@ public class Gun : MonoBehaviour
                 hitPoint = hit.point;
                 // 적 데미지
                 GameObject enemy = hit.collider.gameObject;
+
+                if(enemy.CompareTag("Enemy"))
+                {
+                    enemy.GetComponent<Enemy>().OnDamage(damage, hitPoint);
+                }
 
             }
             else
@@ -61,7 +65,6 @@ public class Gun : MonoBehaviour
 
     IEnumerator CoShotEffect(Vector3 hitPoint)
     {
-        Debug.Log("발사 이펙트");
 
         shotEffect.Play();
 
@@ -69,9 +72,7 @@ public class Gun : MonoBehaviour
         lineRenderer.SetPosition(1, hitPoint);
         lineRenderer.enabled = true;
 
-
         yield return new WaitForSeconds(0.03f);
-        Debug.Log("발사 종료");
         lineRenderer.enabled = false;
 
     }

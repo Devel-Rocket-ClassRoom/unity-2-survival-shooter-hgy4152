@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     // 상태 패턴 연습
-    public enum State 
+    public enum State
     {
         Idle,
         Trace,
@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
     }
 
     private State currentState;
-    public State EnemyState
+    public State CurrentState
     {
         get { return currentState; }
 
@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour
             currentState = value;
 
             // 바뀔 때 필요한 변화
-            switch(currentState)
+            switch (currentState)
             {
                 case State.Idle:
                     animator.SetBool("isTrace", false);
@@ -41,31 +41,41 @@ public class Enemy : MonoBehaviour
                     agent.isStopped = false;
                     break;
                 case State.Dead:
+                    animator.SetTrigger("isDead");
+                    agent.enabled = false;
                     break;
             }
         }
     }
 
+    // 나중에 스포너에서 할당
     public ZombieData zom;
 
-    public Transform target;
+    public AtkPattern atkPattern; // >> 공격패턴 추가
+
+    private Transform target;
     private NavMeshAgent agent;
-    private Animator animator;
+    public Animator animator;
     public AttackArea attackArea;
 
+    public ParticleSystem hitEffect;
+
     private bool HasTarget;
-    private bool coAtk;
     public float searchDistance = 10f;
 
-    private int damage = 20;
-    private int health;
-    private float atkInterval = 1f;
+    public int damage = 20;
+    public int health;
+    public float atkInterval = 1f;
+
+
+
+    public bool isDead;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-
+        target = GameObject.FindWithTag("Player").transform;
     }
 
     public void SetUp()
@@ -88,12 +98,12 @@ public class Enemy : MonoBehaviour
             HasTarget = false;
         }
 
-        // 공격 체크
-        if(attackArea.isAttack)
-        {
-            EnemyState = State.Attack;
-        }
 
+        if(health <= 0 && !isDead)
+        {
+            CurrentState = State.Dead;
+            isDead = true;
+        }
 
         switch (currentState)
         {
@@ -116,9 +126,9 @@ public class Enemy : MonoBehaviour
     private void UpdateIdle()
     {
         // 이 상태일 때 전환 가능한 상태들
-        if(HasTarget)
+        if (HasTarget)
         {
-            EnemyState = State.Trace;
+            CurrentState = State.Trace;
         }
 
 
@@ -131,9 +141,15 @@ public class Enemy : MonoBehaviour
 
     private void UpdateTrace()
     {
-        if(!HasTarget)
+        if (!HasTarget)
         {
-            EnemyState = State.Idle;
+            CurrentState = State.Idle;
+        }
+
+        // 공격 체크
+        if (attackArea.isAttack)
+        {
+            CurrentState = State.Attack;
         }
 
         agent.SetDestination(target.position);
@@ -147,20 +163,16 @@ public class Enemy : MonoBehaviour
 
     private void UpdateAttack()
     {
-        if(!attackArea.isAttack)
+        if (!attackArea.isAttack)
         {
-            EnemyState = State.Idle;
+            CurrentState = State.Idle;
 
         }
 
         agent.velocity = Vector3.zero;
 
-
-        if(!coAtk)
-        {
-            StartCoroutine(CoAttack(attackArea.target));
-
-        }
+        // 생성할때 맞춰서 스포너에서 할당해주기
+        atkPattern.Attack(target.gameObject, gameObject);
 
         var lookAt = target.position;
         lookAt.y = transform.position.y;
@@ -170,22 +182,38 @@ public class Enemy : MonoBehaviour
 
     private void UpdateDead()
     {
+        Destroy(gameObject, 2f);
     }
     #endregion
 
-    private IEnumerator CoAttack(GameObject player)
+    public void OnDamage(int damage, Vector3 hitPoint)
     {
+        health -= damage;
 
 
-        coAtk = true;
-        Debug.Log("공격");
-        animator.speed = 3;
+        hitEffect.transform.LookAt(hitPoint);
+        hitEffect.Play();
+    }
 
-        yield return new WaitForSeconds(atkInterval);
-
-        animator.speed = 1;
-        coAtk = false;
+    public void StartSinking()
+    {
+        StartCoroutine(CoSinking());
 
     }
 
+    IEnumerator CoSinking()
+    {
+        float sinkSpeed = 3f; 
+
+        while (true)
+        {
+            transform.Translate(Vector3.down * sinkSpeed * Time.deltaTime);
+            if (transform.position.y < -5f)
+            {
+                break;
+            }
+
+            yield return null; 
+        }
+    }
 }

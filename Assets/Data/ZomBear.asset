@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa7e5991faf9bfc4e90fe266d06c2b18, type: 3}
   m_Name: ZomBear
   m_EditorClassIdentifier: Assembly-CSharp::ZombieData
-  Health: 100
-  Attack: 20
-  speed: 4
+  Health: 50
+  Attack: 10
+  Speed: 4
+  AtkInterval: 1
