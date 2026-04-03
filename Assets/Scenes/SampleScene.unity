@@ -620,7 +620,7 @@ GameObject:
   - component: {fileID: 238171580}
   - component: {fileID: 238171579}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: SettingWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -894,6 +894,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 278526883}
+  - component: {fileID: 278526884}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -916,6 +917,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &278526884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278526882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3332a846a44457347860e62364ed9ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UiManager
+  scoreText: {fileID: 0}
+  effectVolume: {fileID: 251387766}
+  musicVolume: {fileID: 40546974}
+  quitGame: {fileID: 810054192}
+  Resume: {fileID: 1834819405}
+  sound: {fileID: 2132841010}
+  setting: {fileID: 238171577}
 --- !u!1 &295680008 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100078, guid: f1d84cc28597f5641a3d9cbc4df7e306, type: 3}

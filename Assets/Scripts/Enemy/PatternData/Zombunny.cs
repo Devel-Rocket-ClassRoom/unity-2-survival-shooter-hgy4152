@@ -10,9 +10,10 @@ public class Zombunny : AtkPattern
 
         coAtk = true;
         zombie.animator.speed = 3;
-        
+
         // 체력 감소
-        playerState.Health -= zombie.damage;
+        playerState.OnDamage(zombie.damage);
+
 
         yield return new WaitForSeconds(zombie.atkInterval);
 

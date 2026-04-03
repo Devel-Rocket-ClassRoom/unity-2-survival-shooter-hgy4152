@@ -60,6 +60,9 @@ public class Enemy : MonoBehaviour
 
     public ParticleSystem hitEffect;
 
+    public AudioClip deathAudio;
+    public AudioClip damageAudio;
+
     private bool HasTarget;
     public float searchDistance = 10f;
 

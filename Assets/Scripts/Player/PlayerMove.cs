@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Playables;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class PlayerMove : MonoBehaviour
 
     private Animator playerAnimator;
     private PlayerInput playerInput;
+    private PlayerState playerState;
     private Rigidbody playerRigidbody;
     private Vector3 direction;
 
@@ -18,11 +20,19 @@ public class PlayerMove : MonoBehaviour
     {
         playerAnimator = GetComponent<Animator>();
         playerInput = GetComponent<PlayerInput>();
+        playerState = GetComponent<PlayerState>();
         playerRigidbody = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
+        if(playerState.isDead)
+        {
+ 
+            return;
+        }
+
+
         playerAnimator.SetFloat(HashMove, direction.normalized.magnitude);
 
 
@@ -41,6 +51,11 @@ public class PlayerMove : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (playerState.isDead)
+        {
+
+            return;
+        }
 
         direction = new Vector3(playerInput.MoveSide, 0f, playerInput.MoveForward);
 

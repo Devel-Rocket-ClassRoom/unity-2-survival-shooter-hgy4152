@@ -63,7 +63,7 @@ public class EnemySpawner : MonoBehaviour
 
 
         }
-
+        // 죽은 애 제거
         enemyList.RemoveAll((x) => x.health <= 0);
     }
 

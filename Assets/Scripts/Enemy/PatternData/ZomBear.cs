@@ -10,7 +10,8 @@ public class ZomBear : AtkPattern
 
         coAtk = true;
         zombie.animator.speed = 3;
-        playerState.Health -= zombie.damage;
+        playerState.OnDamage(zombie.damage);
+
 
 
         yield return new WaitForSeconds(zombie.atkInterval);
