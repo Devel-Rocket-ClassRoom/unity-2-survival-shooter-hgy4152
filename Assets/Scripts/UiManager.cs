@@ -4,17 +4,15 @@ using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
 {
-    public TextMeshPro scoreText;
+    public TextMeshProUGUI scoreText;
 
-    public Slider effectVolume;
     public Slider musicVolume;
+    public Slider effectVolume;
+
+    public Toggle isMute;
+
     public AudioSource[] effect;
     public AudioSource bgm;
-
-    public Button quitGame;
-    public Button Resume;
-
-    public Toggle sound;
 
     public GameObject setting;
 
@@ -27,4 +25,29 @@ public class UiManager : MonoBehaviour
         }
     }
 
+
+    public void QuitGame()
+    {
+        Debug.Log("종료");
+    }
+    public void ResumeGame()
+    {
+        Debug.Log("재개");
+        setting.SetActive(false);
+    }
+
+    public void musicVolumeSet()
+    {
+
+    }
+
+    public void effectVolumeSet()
+    {
+
+    }
+
+    public void isMuteSet()
+    {
+
+    }
 }
